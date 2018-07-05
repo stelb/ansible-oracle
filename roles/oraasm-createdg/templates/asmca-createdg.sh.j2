@@ -22,6 +22,14 @@
        {% endif %}
      {% endfor %}
 {% else %}
+     {% for disk in  item.disk    %}
+       {% if disk.failgroup is defined %} \
+           -diskList '{{ disk.device }}' \
+               -failuregroup {{ disk.failgroup }} \
+       {% else %}
+         -disk '{{ disk.device }}' \
+       {% endif %}
+     {% endfor %}
 {% endif %}
 \
 {% for a in item.properties %}
