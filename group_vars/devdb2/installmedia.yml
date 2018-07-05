@@ -1,0 +1,9 @@
+---
+is_sw_source_local: no
+configure_gloginsql: true
+oracle_sw_copy: true
+oracle_sw_unpack: true
+#  oracle_stage_remote: /nfs/software/orasw
+install_from_nfs: false
+oracle_stage: /www/INSTALL
+oracle_sw_source_local: "/Volumes/DATA/oracle"

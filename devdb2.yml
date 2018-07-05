@@ -1,0 +1,34 @@
+---
+#- name: host config
+#  hosts: devdb
+#  become: yes
+#  roles:
+#    - common
+#    - orahost
+
+- name: gi install
+  hosts: devdb2
+  become: yes
+  roles:
+    - oraswgi-install
+
+- name: database sw install
+  hosts: devdb2
+  become: yes
+  roles:
+    - oraswdb-install
+    - oradb-manage-db
+
+- name: install cx_Oracle
+  hosts: devdb2
+  become: yes
+  roles:
+    - cxoracle
+
+- name: tbs
+  hosts: devdb2
+  become: yes
+  roles:
+    - oradb-manage-services
+    - oradb-manage-tablespace
+    - oradb-manage-users

@@ -1,0 +1,4 @@
+---
+# cx-oracle
+use_proxy: yes
+http_proxy: http://localhost:3128

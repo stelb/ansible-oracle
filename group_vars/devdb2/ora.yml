@@ -1,0 +1,71 @@
+---
+hostgroup: "{{ group_names[0] }}"
+
+oracle_base: /www/oracle
+oracle_inventory_loc: /www/oraInventory
+oracle_home_gi_so: "/www/oracle/grid/{{ oracle_install_version_gi }}"
+
+
+
+
+
+
+
+
+oracle_databases:                                               # Dictionary describing the databases to be installed
+  - home: db1                                                   # 'Last' directory in ORACLE_HOME path (e.g /u01/app/oracle/12.1.0.2/racdb)
+    oracle_version_db: 12.1.0.2                          # Oracle version
+    oracle_edition: EE                                   # The edition of database-server (EE,SE,SEONE)
+    oracle_db_name: orclcdb                                 # Database name
+    oracle_db_type: SI                                  # Type of database (RAC,RACONENODE,SI,SIFO)
+    is_container: true                                # (true/false) Is the database a container database
+    pdb_prefix: pdb
+    num_pdbs: 0
+    storage_type: ASM                                     # Database storage to be used. ASM or FS.
+    init_parameters:
+      - { name: db_recovery_file_dest_size, value: 4G, state: present, scope: both }
+      - { name: db_recovery_file_dest, value: '+FRA', state: present, scope: both }
+      - { name: pga_aggregate_target, value: 500M, state: present, scope: both }
+      - { name: _parallel_statement_queuing, value: "false", state: present, scope: both }
+      - { name: sga_target, value: 1G, state: present, scope: spfile }
+      - { name: sga_max_size, value: 1G, state: present, scope: spfile }
+      - { name: open_cursors, value: 400, state: present, scope: both }
+      - { name: processes, value: 700, state: present, scope: spfile }
+    oracle_db_mem_totalmb: 1024                            # Amount of RAM to be used for SGA
+    oracle_database_type: MULTIPURPOSE                   # MULTIPURPOSE|DATA_WAREHOUSING|OLTP
+    redolog_size_in_mb: 100
+    state: present
+    datafile_dest: "SI_DATA"
+    recoveryfile_dest: "SI_DATA"
+    services:
+      - { name: srv_sby, role: physical_standby, state: stopped }
+      - { name: srv_prim, role: primary, state: started }
+    users:
+      - schema: c##dba
+        container: all
+        grants:
+             - dba
+        state: present
+  - home: se1
+    oracle_version_db: 12.2.0.1
+    oracle_edition: SE2
+    oracle_db_name: orase2
+    oracle_db_type: SI
+    is_container: true
+    num_pdbs: 0
+    storage_type: ASM
+    init_parameters:
+      - { name: db_recovery_file_dest_size, value: 4G, state: present, scope: both }
+      - { name: db_recovery_file_dest, value: '+SI_DATA', state: present, scope: both }
+      - { name: pga_aggregate_target, value: 500M, state: present, scope: both }
+      - { name: _parallel_statement_queuing, value: "false", state: present, scope: both }
+      - { name: sga_target, value: 1G, state: present, scope: spfile }
+      - { name: sga_max_size, value: 1G, state: present, scope: spfile }
+      - { name: open_cursors, value: 400, state: present, scope: both }
+      - { name: processes, value: 200, state: present, scope: spfile }
+    oracle_db_mem_totalmb: 2048
+    oracle_database_type: OLTP
+    redolog_size_in_mb: 100
+    state: present
+    datafile_dest: "SI_DATA"
+    recoveryfile_dest: "+SI_DATA"

@@ -1,0 +1,31 @@
+---
+configure_public_yum_repo: true
+configure_epel_repo: false
+configure_interconnect: false
+configure_ssh: false
+configure_host_disks: false
+role_separation: true
+install_os_packages: true
+
+common_packages:
+  - ncdu
+  - unzip
+  - rlwrap
+
+oracle_user: oracle
+
+oracle_groups:
+  - { group: asmdba, gid: 606 }
+  - { group: asmoper, gid: 607 }
+  - { group: asmadmin, gid: 605 }
+  - { group: oinstall, gid: 601 }
+  - { group: dba, gid: 600 }
+  - { group: backupdba, gid: 608 }
+  - { group: oper, gid: 602 }
+  - { group: dgdba, gid: 609 }
+  - { group: kmdba, gid: 610 }
+
+oracle_users:         # Passwd :oracle
+  - { username: oracle, uid: 600, primgroup: oinstall, othergroups: "dba,asmdba,backupdba,dgdba,kmdba,oper", passwd: "$6$VwR.53R4$HtKoSj3TxZCc4nWoqCrnBx8ldjJ2e7pfe1KKEvjkctAK653RL5FfsPRh5SuhrZEcGElba.G68EPHG3dV5z7ty." }
+grid_users:           # Passwd :grid
+  - { username: grid, uid: 601, primgroup: oinstall, othergroups: "asmadmin,asmdba,asmoper,dba", passwd: "$6$/yJx24id$K8gB.l5GEMJlv9Q.v1bulyHiRRqZlZaUwoInNEixd9FBRxj9wyZYyyWzgOkRg9gBMfheH/kgRjranYpnAINRI1" }

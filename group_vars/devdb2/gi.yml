@@ -1,0 +1,12 @@
+---
+oracle_install_version_gi: 12.2.0.1
+oracle_asm_init_dg: si_data
+
+# rac
+configure_cluster: false
+oracle_gi_cluster_type: standard
+oracle_scan: orarac-scan-dc1.discworld.net
+oracle_vip: -vip
+oracle_gi_nic_pub: eth0
+oracle_gi_nic_priv: eth1
+oracle_scan_port: 1521

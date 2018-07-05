@@ -1,0 +1,14 @@
+---
+old_diskgroup_config: false
+asm_diskgroups:
+  - diskgroup: si_data
+    state: present
+    properties:
+      - {redundancy: external, ausize: 4}
+    attributes:
+      - {name: compatible.asm, value: "{{oracle_install_version_gi}}.0"}
+      - {name: compatible.rdbms, value: 11.2.0.4.0}
+    disk:
+      - {device: /dev/oracle/asm/data_07, asmlabel: data01}
+      - {device: /dev/oracle/asm/data_08, asmlabel: data02}
+      - {device: /dev/oracle/asm/data_09, asmlabel: data03}

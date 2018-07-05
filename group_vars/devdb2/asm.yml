@@ -1,0 +1,3 @@
+---
+oracle_asm_disk_string: /dev/oracle/asm/
+device_persistence: 'none'

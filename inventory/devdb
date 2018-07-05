@@ -1,0 +1,14 @@
+[devdb:children]
+devdb1
+devdb2
+devdb3
+devdb4
+
+[devdb1]
+db01n1.dev.int.nexinto.com
+[devdb2]
+db01n2.dev.int.nexinto.com
+[devdb3]
+db01n3.dev.int.nexinto.com
+[devdb4]
+db01n4.dev.int.nexinto.com
