@@ -32,3 +32,8 @@
     - oradb-manage-services
     - oradb-manage-tablespace
     - oradb-manage-users
+
+- name: nx stuff
+  hosts: devdb2
+  roles:
+    - nx-oradb-env

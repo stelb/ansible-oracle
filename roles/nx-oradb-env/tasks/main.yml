@@ -1,0 +1,13 @@
+---
+- name: nx-oradb-env | create env files
+  template:
+    src: db.env.j2
+    dest: "/home/{{ oracle_user }}/{{dbh.oracle_db_name}}.env"
+    owner: "{{ oracle_user }}"
+    group: "{{ oracle_group }}"
+    mode: 0660
+  with_items:
+    - "{{ oracle_databases }}"
+  loop_control:
+    loop_var: dbh
+  when: oracle_databases is defined
