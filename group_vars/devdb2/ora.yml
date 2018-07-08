@@ -69,3 +69,30 @@ oracle_databases:                                               # Dictionary des
     state: present
     datafile_dest: "SI_DATA"
     recoveryfile_dest: "+SI_DATA"
+  - home: ee1
+    oracle_version_db: 12.2.0.1
+    oracle_edition: EE
+    oracle_db_name: oraee
+    oracle_db_type: SI
+    is_container: true
+    #oracle_EE_option_state: enable
+    oracle_EE_options:
+      - {option: rat,           state: true}
+      - {option: partitioning,  state: true}
+    num_pdbs: 0
+    storage_type: ASM
+    init_parameters:
+      - { name: db_recovery_file_dest_size, value: 4G, state: present, scope: both }
+      - { name: db_recovery_file_dest, value: '+SI_DATA', state: present, scope: both }
+      - { name: pga_aggregate_target, value: 500M, state: present, scope: both }
+      - { name: _parallel_statement_queuing, value: "false", state: present, scope: both }
+      - { name: sga_target, value: 1G, state: present, scope: spfile }
+      - { name: sga_max_size, value: 1G, state: present, scope: spfile }
+      - { name: open_cursors, value: 400, state: present, scope: both }
+      - { name: processes, value: 200, state: present, scope: spfile }
+    oracle_db_mem_totalmb: 2048
+    oracle_database_type: OLTP
+    redolog_size_in_mb: 100
+    state: present
+    datafile_dest: "SI_DATA"
+    recoveryfile_dest: "+SI_DATA"
