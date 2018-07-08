@@ -3,7 +3,7 @@ hostgroup: "{{ group_names[0] }}"
 
 oracle_base: /www/oracle
 oracle_inventory_loc: /www/oraInventory
-oracle_home_gi_so: "/www/oracle/grid/{{ oracle_install_version_gi }}"
+oracle_home_gi_so: "/www/oracle/{{ oracle_install_version_gi }}/grid"
 
 
 
