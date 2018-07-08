@@ -5,6 +5,11 @@ oracle_base: /www/oracle
 oracle_inventory_loc: /www/oraInventory
 oracle_home_gi_so: "/www/oracle/{{ oracle_install_version_gi }}/grid"
 
+# global setting
+oracle_EE_options:
+  - {option: rat,           state: true}
+  - {option: partitioning,  state: true}
+
 
 
 
@@ -75,10 +80,6 @@ oracle_databases:                                               # Dictionary des
     oracle_db_name: oraee
     oracle_db_type: SI
     is_container: true
-    #oracle_EE_option_state: enable
-    oracle_EE_options:
-      - {option: rat,           state: true}
-      - {option: partitioning,  state: true}
     num_pdbs: 0
     storage_type: ASM
     init_parameters:
