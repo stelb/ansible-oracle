@@ -1,8 +1,8 @@
-[devdb:children]
-devdb1
-devdb2
-devdb3
-devdb4
+#[devdb:children]
+#devdb1
+#devdb2
+#devdb3
+#devdb4
 
 [devdb1]
 db01n1.dev.int.nexinto.com
