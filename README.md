@@ -3,23 +3,44 @@
 - Installs Oracle RAC, RAC One Node and normal single instances.
 - Start with one or more clean machine(s), end up with a fully configured RAC Cluster.
 
-
-By default, installs a single instance 12.2.0.1 database on filesystem. Just put the following file in /tmp on the control-machine
-
-- `linuxx64_12201_database.zip`
-
-
-
 ### Getting started
 
 Pre-requisites:
 
 - Ansible >= 2.4
 - Oracle Linux (or any RHEL-based Linux System) >= 6.4
-- Oracle Database/Grid Infrastructure 12.2.0.1, 12.1.0.1, 12.1.0.2, 11.2.0.4, 11.2.0.3
+- Oracle Database/Grid Infrastructure 18.3.0.0, 12.2.0.1, 12.1.0.1, 12.1.0.2, 11.2.0.4, 11.2.0.3
+- For example configurations, look in:
+```
+  SI/FS:   group_vars/vbox-si-fs.  - vagrant config: http://github.com/oravirt/vagrant-vbox-si-fs
+  SI/ASM:  group_vars/vbox-si-asm  - vagrant config: http://github.com/oravirt/vagrant-vbox-si-asm
+  RAC/ASM: group_vars/vbox-rac-dc1 - vagrant config: http://github.com/oravirt/vagrant-vbox-rac
+```
+
+By default, installs a single instance 18.3.0.0 database on a filesystem.
+
+1. Clone this repository:
+   `git clone --recursive https://github.com/oravirt/ansible-oracle`
+
+2. Add the following file to `/tmp` on the controlmachine
+   - `LINUX.X64_180000_db_home.zip`
+
+3. Create an Ansible inventory file
+   ```
+   [myhostgroup]
+    dbhost
+   ```
+
+4. Run the playbook:
+
+   `ansible-playbook single-instance-db-on-fs.yml -e hostgroup=myhostgroup -i /path/to/inventory`
+
+   where the `-i` part is optional
 
 
 ### Roles
+
+A lot of these roles uses Ansible modules that comes from [ansible-oracle-modules](https://github.com/oravirt/ansible-oracle-modules)
 
 **common**
 
@@ -66,11 +87,14 @@ This role will install and configure Oracle Grid Infrastructure (RAC/SI)
 - Install Oracle Grid Infrastructure
 
 
-**oraasm-createdg**
 
-This role will create the diskgroup(s) that should be used for database storage. Uses asmca to create diskgroups.
-- Generates a shellscript that uses asmca to create the diskgroups.
+**oraasm-manage-diskgroups**
 
+This role will statefully manage the lifecycle of an ASM diskgroup
+- Uses the **oracle_asmdg** module
+- Create/delete diskgroup.
+- Add/remove disks
+- Manage attributes for the DG
 
 **oraswdb-install**
 
@@ -82,33 +106,27 @@ This role will install the oracle database server(s). It is possible to run more
 
 **oradb-manage-db**
 
-This role creates/deletes databases
-- Generates a responsefile to be used by dbca
-- Creates the db using dbca
+This role statefully manages the lifecycle of a database
+- Uses the **oracle_db** module
+- Creates/deletes: `state: present/absent`
+- Maintains archivelog/force_logging True/False
 
+**oraswgi-manage-patches**
 
-_**oradb-create (deprecated - use oradb-manage-db instead)**_
+Manage patches in a GI environment
+- Uses the **oracle_opatch** module
+- Manages opatchauto type of patches as well as 'normal' one-offs
 
-This role creates the databases (RAC/RAC One Node, Single Instance). Possible to create container databases. Performs a dbca silent run to create the database.
-- Generates a responsefile to be used by dbca
-- Creates the db using dbca
-- Changes parameters based on input.
+**oraswdb-manage-patches**
 
-
-_**oradb-delete (deprecated - use oradb-manage-db instead)**_
-
-This role deletes a database
-
-
-**oraswgi-opatch**
-
-This role will use opatch to apply a patch to a Grid Infrastructure home. At the moment it is basically written to apply PSU's, not one-off patches. It'll probably work but it is not designed for that at the moment.
-Does an initial check to see if the patches are already applied, and skips through all steps if they are.
+Statefully manage patches in a DB environment
+- Uses the **oracle_opatch** module
+- Manages opatchauto type of patches as well as 'normal' one-offs
 
 
 **cxoracle**
 
-Installs cx_Oracle in preparation for using [ansible-oracle-modules](https://github.com/oravirt/ansible-oracle-module)
+Installs cx_Oracle in preparation for using [ansible-oracle-modules](https://github.com/oravirt/ansible-oracle-modules)
 
 
 **orahost-cron**
@@ -118,13 +136,44 @@ Configures cron schedules if needed
 
 **orahost-logrotate**
 
-By default sets up logrotate for alert logs and listener logs
+
+**oradb-manage-<*>**
+
+Statefully manages various aspects of the DB. They all use modules from [ansible-oracle-modules](https://github.com/oravirt/ansible-oracle-modules)
+
+- **oradb-manage-pdb**
+- **oradb-manage-tablespace**
+- **oradb-manage-parameters**
+- **oradb-manage-roles**
+- **oradb-manage-users**
+- **oradb-manage-grants**
+- **oradb-manage-redo**
+- **oradb-manage-services**
+
+
+
+### Deprecated roles
+
+_**oraasm-createdg (use oraasm-manage-diskgroups instead)**_
+
+_**oradb-create (use oradb-manage-db instead)**_
+
+_**oradb-delete (use oradb-manage-db instead)**_
+
+_**oraswgi-opatch (use oraswgi-manage-patches instead)**_
 
 
 
 ### Note
 
 These are the Oracle binaries that are pre-configured to be used. They have to be manually downloaded and made available (either locally, from a web endpoint or through a nfs-share)
+
+For 18.3.0.0:
+```
+    LINUX.X64_180000_db_home.zip
+    LINUX.X64_180000_grid_home.zip
+ ```
+
 
 For 12.2.0.1:
 ```

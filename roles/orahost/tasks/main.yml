@@ -69,6 +69,7 @@
     command: nslookup {{ ansible_hostname }}
     register: ns
     ignore_errors: True
+    changed_when: False
     tags: etchosts
 
   - name: Add host to /etc/hosts if needed
@@ -201,7 +202,7 @@
 
   # create partition only when device != pvname
   - name: filesystem | Create partition and pv
-    shell:  parted -a optimal {{ item.1.device }} "mklabel gpt mkpart primary 1 -1"
+    shell:  parted -a optimal -s {{ item.1.device }} "mklabel gpt mkpart primary 1 -1"
     args:
        creates: "{{ item.1.pvname }}"
     with_subelements:
@@ -245,6 +246,10 @@
     with_subelements:
         - "{{host_fs_layout}}"
         - filesystem
+    tags: hostfs
+
+  - name: filesystem | Create directory for oraInventory
+    file: path={{ oracle_inventory_loc }} state=directory owner={{ oracle_user }} group={{ oracle_group }} mode=775
     tags: hostfs
 
   - name: Oracle-recommended kernel settings
