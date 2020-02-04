@@ -70,6 +70,7 @@
     register: ns
     ignore_errors: True
     changed_when: False
+    check_mode: no
     tags: etchosts
 
   - name: Add host to /etc/hosts if needed
